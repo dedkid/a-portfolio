@@ -3,7 +3,7 @@ import path from "node:path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  base: '/a-portfolio/',
+  base: '/a-portfolio/', // <--- MUST MATCH YOUR REPO NAME
   root: path.resolve(__dirname, "client"),
   plugins: [react()],
   resolve: {
