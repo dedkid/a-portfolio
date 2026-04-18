@@ -2,7 +2,6 @@
 
 /* If you need your custom variants or animations, add them below the import */
 @plugin "tailwindcss-animate";
-@plugin "tw-animate-css";
 @custom-variant dark (&:is(.dark *));
 
 body {
