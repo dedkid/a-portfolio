@@ -2,21 +2,15 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
 import { Route, Switch, Router as WouterRouter } from "wouter";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
-/**
- * The Router component handles the navigation logic.
- * The 'base' prop is critical for GitHub Pages deployment.
- */
 function Router() {
   return (
+    // This tells the app: "Everything starts AFTER /a-portfolio"
     <WouterRouter base="/a-portfolio">
       <Switch>
-        <Route path="/" component={Home} />
-        <Route path="/404" component={NotFound} />
-        {/* Final fallback route */}
+        <Route path="/" component={Home} /> 
         <Route component={NotFound} />
       </Switch>
     </WouterRouter>
