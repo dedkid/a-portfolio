@@ -1,3 +1,4 @@
+import tailwindcss from '@tailwindcss/vite'; // <--- ADD THIS
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
@@ -5,7 +6,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
   base: '/a-portfolio/', // <--- MUST MATCH YOUR REPO NAME
   root: path.resolve(__dirname, "client"),
-  plugins: [react()],
+  plugins: [react(), tailwindcss(),], 
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "client/src"),
