@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Github, ExternalLink, Download, Mail, Send, ArrowRight, Menu, X } from "lucide-react";
+import { Github, ExternalLink, Download, Mail, Send, ArrowRight, Menu, X} from "lucide-react";
 import { useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
 
@@ -250,7 +250,7 @@ export default function Home() {
                   "Full-stack marketplace with real-time inventory management, payment processing, and comprehensive admin dashboard. Built with React, Node.js, and PostgreSQL.",
                 tech: ["React", "Node.js", "PostgreSQL", "Stripe"],
                 link: "https://github.com",
-                demo: "https://example.com",
+                demo: "https://ams-aki.gt.tc",
               },
               {
                 title: "Project Tracker",
@@ -574,12 +574,21 @@ export default function Home() {
                 </a>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Resume</p>
-                <a href="#" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base">
-                  <Download size={16} />
-                  Download PDF
-                </a>
-              </div>
+  <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">
+    Resume
+  </p>
+  <div className="flex flex-wrap gap-4">
+    {/* VIEW LINK */}
+    <a 
+      href={`${import.meta.env.BASE_URL}Nieva%2K26.pdf`} 
+      target="_blank" 
+      rel="noreferrer"
+      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base"
+    >
+      Download PDF
+    </a>
+  </div>
+</div>
               <div>
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2">Social</p>
                 <div className="flex gap-4">
@@ -589,7 +598,7 @@ export default function Home() {
                   <a href="https://facebook.com/nievalouki" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base">
                     Facebook
                   </a>
-                  <a href="--" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base">
+                  <a href="https://www.linkedin.com/in/nievaakira/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base">
                     LinkedIn
                   </a>
                 </div>
