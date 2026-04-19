@@ -580,7 +580,7 @@ export default function Home() {
   <div className="flex flex-wrap gap-4">
     {/* VIEW LINK */}
     <a 
-      href={`${import.meta.env.BASE_URL}Nieva%2K26.pdf`} 
+      href="resume.pdf"
       target="_blank" 
       rel="noreferrer"
       className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium transition-colors text-sm md:text-base"
