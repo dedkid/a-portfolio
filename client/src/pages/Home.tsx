@@ -5,8 +5,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Github, ExternalLink, Download, Mail, Send, ArrowRight, Menu, X} from "lucide-react";
 import { useState } from "react";
 import { AnimatedSection } from "@/components/AnimatedSection";
+import CertificatesSection from '../components/CertificatesSection';
 
-/**
+/*
  * Professional Minimalist Design with Mobile Optimization:
  * - Clean, refined aesthetic inspired by premium tech companies
  * - Fully responsive: mobile-first approach with breakpoints at sm, md, lg
@@ -132,8 +133,8 @@ export default function Home() {
             <a href="#experience" className="hover:bg-slate-900 hover:text-white active:bg-blue-700 transition-colors py-4 px-12 rounded-lg">
               Experience
             </a>
-            <a href="#blog" className="hover:bg-slate-900 hover:text-white active:bg-blue-700 transition-colors py-4 px-12 rounded-lg">
-              Blog
+            <a href="#cert" className="hover:bg-slate-900 hover:text-white active:bg-blue-700 transition-colors py-4 px-12 rounded-lg">
+              Certifications
             </a>
             <a href="#contact" className="hover:bg-slate-900 hover:text-white active:bg-blue-700 transition-colors py-4 px-12 rounded-lg">
               Contact
@@ -160,8 +161,8 @@ export default function Home() {
               <a href="#experience" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-900 transition-colors py-2">
                 Experience
               </a>
-              <a href="#blog" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-900 transition-colors py-2">
-                Blog
+              <a href="#cert" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-900 transition-colors py-2">
+                Certifications
               </a>
               <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-900 transition-colors py-2">
                 Contact
@@ -456,60 +457,12 @@ export default function Home() {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* Blog Section */}
-      <section id="blog" className="py-16 md:py-24 bg-gray-50">
-        <div className="container px-4 md:px-8 w-full">
-          <AnimatedSection animation="fade-in-up" className="max-w-3xl mb-12 md:mb-16">
-            <p className="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide mb-2">Credentials</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">Certificates</h2>
-          </AnimatedSection>
-
-          <AnimatedSection animation="fade-in-up" stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {[
-              {
-                title: "Building Scalable React Applications",
-                date: "Mar 15, 2024",
-                excerpt:
-                  "Exploring patterns and best practices for scaling React applications to handle millions of users without performance degradation.",
-                tags: ["React", "Performance", "Architecture"],
-              },
-              {
-                title: "Database Optimization Strategies",
-                date: "Mar 8, 2024",
-                excerpt:
-                  "Deep dive into query optimization, indexing strategies, and caching patterns that improved our system throughput by 300%.",
-                tags: ["PostgreSQL", "DevOps", "Optimization"],
-              },
-              {
-                title: "Microservices: When and Why",
-                date: "Feb 28, 2024",
-                excerpt:
-                  "Analyzing the trade-offs of microservices architecture and when monolithic systems are the better choice for your team.",
-                tags: ["Architecture", "DevOps", "Best Practices"],
-              },
-            ].map((article, idx) => (
-              <Card
-                key={idx}
-                className="bg-white border border-gray-200 p-6 md:p-8 hover:shadow-elevated transition-smooth cursor-pointer group"
-              >
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">{article.date}</p>
-                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors">
-                  {article.title}
-                </h3>
-                <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-4">{article.excerpt}</p>
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200">
-                  {article.tags.map((tag) => (
-                    <span key={tag} className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </Card>
-            ))}
-          </AnimatedSection>
-        </div>
-      </section>
+<section id="cert">
+  <main className="py-16 md:py-24 bg-gray-50">
+    <div>
+    <CertificatesSection />
+    </div>
+  </main></section>
 
       {/* Contact Section */}
       <section id="contact" className="py-16 md:py-24 bg-white">
