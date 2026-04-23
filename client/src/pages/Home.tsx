@@ -289,7 +289,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   "A specialized locator platform designed to help students and property owners connect to provide and rent the most convenient accomodations. Features a secure user authentication system, detailed listing management, and a responsive interface.",
                 tech: ["Visual Basic", "Access", "PostgreSQL", "Redis"],
                 link: "https://github.com/dedkid/DormHunt_group-project",
-                demo: "DormHunt_Project.zip",
+                demo: "DormHunt.zip",
               },
               {
                 title: "Siklisto",
