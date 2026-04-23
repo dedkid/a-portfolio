@@ -20,11 +20,50 @@ import CertificatesSection from '../components/CertificatesSection';
 import { useEffect, useRef } from "react";
 
 export default function Home() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+
+  // Ensure these are at the top of your component
+const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+const [isSubmitting, setIsSubmitting] = useState(false);
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setIsSubmitting(true);
+
+  const form = e.currentTarget;
+  const data = new FormData(form);
+  
+  // Create the object to send
+  const object = {
+    ...Object.fromEntries(data.entries()),
+    access_key: "e3f0a2bf-3dfb-43bf-a288-fcbdf6560620", // <-- PUT YOUR KEY FROM EMAIL HERE
+    subject: `New Portfolio Contact: ${formData.name}`,
+  };
+
+  try {
+    const res = await fetch("https://api.web3forms.com/submit", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(object)
+    }).then((res) => res.json());
+
+    if (res.success) {
+      alert("Message sent! I'll get back to you soon.");
+      setFormData({ name: "", email: "", message: "" });
+      form.reset();
+    } else {
+      alert("Something went wrong. Please try again.");
+    }
+  } catch (err) {
+    alert("Connection error. Please check your internet.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // Add these refs for accelerating inertia scrolling
@@ -108,15 +147,6 @@ export default function Home() {
       }
     };
   }, []);
-
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    setFormData({ name: "", email: "", message: "" });
-  };
-
-  // ... rest of your component
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -248,35 +278,34 @@ export default function Home() {
               {
                 title: "Attendance Management System",
                 description:
-                  "Full-stack marketplace with real-time inventory management, payment processing, and comprehensive admin dashboard. Built with React, Node.js, and PostgreSQL.",
-                tech: ["React", "Node.js", "PostgreSQL", "Stripe"],
-                link: "https://github.com",
+                  "A comprehensive management platform featuring real-time attendance tracking, automated reporting, and an admin dashboard. Engineered with a robust PHP backend and relational database management to handle data entries efficiently.",
+                tech: ["HTMP", "CSS", "PHP", "MySQL"],
+                link: "https://github.com/dedkid/Attendance-Management-Sys",
                 demo: "https://ams-aki.gt.tc",
               },
               {
-                title: "Project Tracker",
+                title: "DormHunt",
                 description:
-                  "Real-time data visualization platform processing 1M+ events daily. Features custom charts, advanced filtering, and data export functionality.",
-                tech: ["React", "TypeScript", "D3.js", "AWS"],
-                link: "https://github.com",
-                demo: "https://example.com",
+                  "A specialized locator platform designed to help students and property owners connect to provide and rent the most convenient accomodations. Features a secure user authentication system, detailed listing management, and a responsive interface.",
+                tech: ["Visual Basic", "Access", "PostgreSQL", "Redis"],
+                link: "https://github.com/dedkid/DormHunt_group-project",
+                demo: "DormHunt_Project.zip",
               },
               {
-                title: "Task Management API",
+                title: "Siklisto",
                 description:
-                  "RESTful API with JWT authentication, role-based access control, and WebSocket support for real-time updates. Fully tested and documented.",
-                tech: ["Node.js", "Express", "PostgreSQL", "Redis"],
-                link: "https://github.com",
-                demo: "https://example.com",
+                  "A community-focused Android application for e-bike users. Built with a focus on high performance and clean UI, providing a platform for users to plot the best routes, share information, and locate available e-bike charging stations.",
+                tech: ["Flutter", "Dart", "Firebase", "Android Studio"],
+                link: "https://github.com/dedkid/Siklisto_group-project",
+                demo: "SIKLISTO-APP-20260422T071309Z-3-001.zip",
               },
               {
-                title: "Content Management System",
-                description:
-                  "Headless CMS with GraphQL API, markdown support, and automated deployment pipeline. Supports multi-language content management.",
-                tech: ["Next.js", "GraphQL", "MongoDB", "Docker"],
-                link: "https://github.com",
-                demo: "https://example.com",
-              },
+  title: "Other Projects",
+  description: "A centralized repository of my software solutions, ranging from Python automation engines to VB.NET desktop applications. Each project includes source code and documentation.",
+  tech: ["Various Tech Stacks", "Programming", "Architecture", "Documentation"],
+  link: "https://drive.google.com/drive/folders/138Cii8j8cPFBb56UnYtqUlgH5C6B9-LU?usp=sharing", // Use this as the main link
+  demo: "special", // A flag to tell the code this is the special card
+},
             ].map((project, idx) => (
               <Card
                 key={idx}
@@ -295,27 +324,42 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
-                <div className="flex flex-col sm:flex-row gap-3 mt-6 pt-6 border-t border-gray-200">
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button
-                      size="sm"
-                      className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold transition-smooth text-xs md:text-sm py-2 md:py-3"
-                    >
-                      <Github size={16} className="mr-2" />
-                      Repository
-                    </Button>
-                  </a>
-                  <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className="w-full border-slate-300 text-slate-900 hover:bg-slate-50 font-semibold transition-smooth text-xs md:text-sm py-2 md:py-3"
-                    >
-                      <ExternalLink size={16} className="mr-2" />
-                      Live Demo
-                    </Button>
-                  </a>
-                </div>
+                <div className="mt-6 pt-6 border-t border-gray-200">
+  {project.title === "Other Projects" ? (
+    /* ONE BIG BUTTON FOR GOOGLE DRIVE */
+    <a href={project.link} target="_blank" rel="noopener noreferrer" className="block w-full">
+      <Button
+        className="w-full bg-blue-600 text-white hover:bg-blue-700 font-bold transition-smooth py-6 flex items-center justify-center gap-3 text-sm md:text-base"
+      >
+        <ExternalLink size={20} />
+        Explore Full Project Drive
+      </Button>
+    </a>
+  ) : (
+    /* ORIGINAL TWO BUTTONS FOR REGULAR PROJECTS */
+    <div className="flex flex-col sm:flex-row gap-3">
+      <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex-1">
+        <Button
+          size="sm"
+          className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold transition-smooth text-xs md:text-sm py-2 md:py-3"
+        >
+          <Github size={16} className="mr-2" />
+          Repository
+        </Button>
+      </a>
+      <a href={project.demo} target="_blank" rel="noopener noreferrer" className="flex-1">
+        <Button
+          size="sm"
+          variant="outline"
+          className="w-full border-slate-300 text-slate-900 hover:bg-slate-50 font-semibold transition-smooth text-xs md:text-sm py-2 md:py-3"
+        >
+          <ExternalLink size={16} className="mr-2" />
+          Demo/Download
+        </Button>
+      </a>
+    </div>
+  )}
+</div>
               </Card>
             ))}
           </AnimatedSection>
@@ -383,82 +427,88 @@ export default function Home() {
       </section>*/}
 
        {/* Experience Timeline Section */}
-      <section id="experience" className="py-16 md:py-24 bg-gray-50">
-        <div className="container px-4 md:px-8 w-full">
-          <AnimatedSection animation="fade-in-up" className="max-w-3xl mb-12 md:mb-16">
-            <p className="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide mb-2">Career Path</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">Experience</h2>
-          </AnimatedSection>
+<section 
+  id="experience" 
+  className="relative py-20 md:py-32 bg-fixed bg-cover bg-center border-y border-gray-100"
+  style={{ 
+    backgroundImage: "linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('https://mir-s3-cdn-cf.behance.net/project_modules/fs/9bc27292880429.5e569ff84e4d0.gif')" 
+  }}
+>
+  <div className="container px-4 md:px-8 w-full relative z-10">
+    <AnimatedSection animation="fade-in-up" className="max-w-3xl mb-12 md:mb-16">
+      <p className="text-xs md:text-sm font-semibold text-blue-600 uppercase tracking-wide mb-2">Career Path</p>
+      <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-900">Experience</h2>
+    </AnimatedSection>
 
-          <AnimatedSection animation="fade-in-up" stagger className="space-y-8 md:space-y-12 max-w-3xl mx-auto w-full">
-            {[
-              {
-                role: "Associate Research Manager",
-                company: "DocDelta Research",
-                period: "2025 - Present",
-                description: "Architected and deployed Python-based automation tools (Selenium/Gspread) to synchronize real-time project data for 20+ concurrent research projects. Systematically identified and resolved numerous data discrepancies using advanced diagnostic scripts and troubleshooting to ensure 100% accuracy. Bridged the gap between healthcare market research requirements and technical execution.",
-                highlights: ["Managed 80+ research projects through the full lifecycle", "Eliminated constant data discrepancies", "Resolved abrupt critical project bottlenecks"],
-              },
-              {
-                role: "IT Project Coordinator",
-                company: "Quadrant Alpha Technology Solutions, Inc.",
-                period: "2024 - 2025",
-                description: "Initiated and led IT automation projects by gathering, analyzing, and documenting business and technical requirements. Acted as the primary liaison between stakeholders and the technical team, ensuring clear communication and alignment.",
-                highlights: ["Directed IT automation projects", "Led cross-functional technical teams", "Defined strategic project scope"],
-              },
-              {
-                role: "Quality Assurance Tester",
-                company: "Quadrant Alpha Technology Solutions, Inc.",
-                period: "2024 - 2025",
-                description: "Performed manual and thorough checking of the system to identify possible bugs or issues. Interpreted reported issues by clients then conducted the necessary examination on the system to replicate said issues in order to identify the solution for them.",
-                highlights: ["Managed JIRA bug lifecycles", "Technical issue replication", "Preventative system audits"],
-              },
-              {
-                role: "Business Analyst",
-                company: "Quadrant Alpha Technology Solutions, Inc.",
-                period: "2024 - 2025",
-                description: "Collaborated with the technical team to translate business requirements into visual solutions, including diagrams, graphics, and screens. Prepared comprehensive project proposals by defining project scope, limitations, resource requirements, and delivery timelines.",
-                highlights: ["Technical requirement translation", "Project scopes mapping", "Visualized solutions"],
-              },
-              {
-                role: "Technical Sales Representative",
-                company: "Quadrant Alpha Technology Solutions, Inc.",
-                period: "2024 - 2025",
-                description: "Researched and managed potential prospects, leads, and client accounts to support business development and pre-implementation activities.",
-                highlights: ["Pre-implementation strategy", "Lead Account Management", "Market Technical Research"],
-              },
-              {
-                role: "Client Service Representative",
-                company: "Quadrant Alpha Technology Solutions, Inc.",
-                period: "2024 - 2025",
-                description: "Maintained active communication with stakeholders during the post-implementation phase to ensure delivered solutions aligned with evolving business needs. Translated business challenges into actionable insights for the technical team to enhance and optimize system performance.",
-                highlights: ["Post-Implementation Liaison", "Defined technical solutions for clients' concerns", "Managed the delivery of client requests and feature fixes"],
-              },
-            ].map((exp, idx) => (
-              <div key={idx} className="relative pl-8 sm:pl-10 md:pl-12 border-l-2 border-blue-200 hover:border-blue-600 transition-colors">
-                <div className="absolute -left-4 sm:-left-5 md:-left-6 top-0 w-7 h-7 sm:w-8 sm:h-8 bg-blue-600 rounded-full border-4 border-white" />
-                <div className="space-y-2">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
-                    <h3 className="text-lg md:text-xl font-bold text-slate-900">{exp.role}</h3>
-                    <span className="text-sm md:text-base font-semibold text-blue-600">{exp.period}</span>
-                  </div>
-                  <p className="text-sm md:text-base font-medium text-slate-600">{exp.company}</p>
-                  <p className="text-sm md:text-base text-slate-600 leading-relaxed mt-2">{exp.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-3">
-                    {exp.highlights.map((highlight) => (
-                      <span key={highlight} className="text-xs md:text-sm px-3 py-1 bg-blue-50 text-blue-700 rounded-full font-medium">
-                        {highlight}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </AnimatedSection>
+    <AnimatedSection animation="fade-in-up" stagger className="space-y-8 md:space-y-12 max-w-3xl mx-auto w-full">
+      {[
+        {
+          role: "Associate Research Manager",
+          company: "DocDelta Research",
+          period: "2025 - Present",
+          description: "Architected and deployed Python-based automation tools (Selenium/Gspread) to synchronize real-time project data for 20+ concurrent research projects. Systematically identified and resolved numerous data discrepancies using advanced diagnostic scripts and troubleshooting to ensure 100% accuracy. Bridged the gap between healthcare market research requirements and technical execution.",
+          highlights: ["Managed 80+ research projects through the full lifecycle", "Eliminated constant data discrepancies", "Resolved abrupt critical project bottlenecks"],
+        },
+        {
+          role: "IT Project Coordinator",
+          company: "Quadrant Alpha Technology Solutions, Inc.",
+          period: "2024 - 2025",
+          description: "Initiated and led IT automation projects by gathering, analyzing, and documenting business and technical requirements. Acted as the primary liaison between stakeholders and the technical team, ensuring clear communication and alignment.",
+          highlights: ["Directed IT automation projects", "Led cross-functional technical teams", "Defined strategic project scope"],
+        },
+        {
+          role: "Quality Assurance Tester",
+          company: "Quadrant Alpha Technology Solutions, Inc.",
+          period: "2024 - 2025",
+          description: "Performed manual and thorough checking of the system to identify possible bugs or issues. Interpreted reported issues by clients then conducted the necessary examination on the system to replicate said issues in order to identify the solution for them.",
+          highlights: ["Managed JIRA bug lifecycles", "Technical issue replication", "Preventative system audits"],
+        },
+        {
+          role: "Business Analyst",
+          company: "Quadrant Alpha Technology Solutions, Inc.",
+          period: "2024 - 2025",
+          description: "Collaborated with the technical team to translate business requirements into visual solutions, including diagrams, graphics, and screens. Prepared comprehensive project proposals by defining project scope, limitations, resource requirements, and delivery timelines.",
+          highlights: ["Technical requirement translation", "Project scopes mapping", "Visualized solutions"],
+        },
+        {
+          role: "Technical Sales Representative",
+          company: "Quadrant Alpha Technology Solutions, Inc.",
+          period: "2024 - 2025",
+          description: "Researched and managed potential prospects, leads, and client accounts to support business development and pre-implementation activities.",
+          highlights: ["Pre-implementation strategy", "Lead Account Management", "Market Technical Research"],
+        },
+        {
+          role: "Client Service Representative",
+          company: "Quadrant Alpha Technology Solutions, Inc.",
+          period: "2024 - 2025",
+          description: "Maintained active communication with stakeholders during the post-implementation phase to ensure delivered solutions aligned with evolving business needs. Translated business challenges into actionable insights for the technical team to enhance and optimize system performance.",
+          highlights: ["Post-Implementation Liaison", "Defined technical solutions for clients' concerns", "Managed the delivery of client requests and feature fixes"],
+        },
+      ].map((exp, idx) => (
+        <div key={idx} className="relative pl-8 sm:pl-10 md:pl-12 border-l-2 border-blue-200 hover:border-blue-600 transition-colors group">
+          <div className="absolute -left-4 sm:-left-5 md:-left-6 top-0 w-7 h-7 sm:w-8 sm:h-8 bg-blue-600 rounded-full border-4 border-white shadow-sm group-hover:scale-110 transition-transform" />
+          <div className="space-y-2">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <h3 className="text-lg md:text-xl font-bold text-slate-900">{exp.role}</h3>
+              <span className="text-sm md:text-base font-semibold text-blue-600 bg-blue-50/50 px-3 py-1 rounded-full">{exp.period}</span>
+            </div>
+            <p className="text-sm md:text-base font-medium text-slate-700">{exp.company}</p>
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed mt-2">{exp.description}</p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {exp.highlights.map((highlight) => (
+                <span key={highlight} className="text-xs md:text-sm px-3 py-1 bg-white/80 backdrop-blur-sm text-blue-700 rounded-full font-medium border border-blue-100 shadow-sm">
+                  {highlight}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
-      </section>
+      ))}
+    </AnimatedSection>
+  </div>
+</section>
 <section id="cert">
-  <main className="py-16 md:py-24 bg-gray-50">
+  <main className="py-16 md:py-24 bg-slate-900">
     <div>
     <CertificatesSection />
     </div>
@@ -476,48 +526,73 @@ export default function Home() {
             </p>
           </AnimatedSection>
 
+          
+
+  
+
           <AnimatedSection animation="fade-in-up">
+
+            
             <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6 mb-12">
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Name</label>
-                <Input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base"
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Email</label>
-                <Input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base"
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-900 mb-2">Message</label>
-                <Textarea
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                  className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 min-h-32 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base"
-                  placeholder="Your message..."
-                  required
-                />
-              </div>
-              <Button
-                type="submit"
-                className="w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 md:py-4 flex items-center justify-center gap-2 transition-smooth text-sm md:text-base"
-              >
-                <Send size={18} />
-                Send Message
-              </Button>
-            </form>
+  {/* The Bot Trap */}
+  <input type="checkbox" name="botcheck" className="hidden" style={{ display: "none" }} />
+
+  <div>
+    <label className="block text-sm font-semibold text-slate-900 mb-2">Name</label>
+    <Input
+      name="name"
+      type="text"
+      value={formData.name}
+      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+      className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base focus:ring-2 focus:ring-blue-500"
+      placeholder="Your name"
+      required
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-semibold text-slate-900 mb-2">Email</label>
+    <Input
+      name="email"
+      type="email"
+      value={formData.email}
+      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+      className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base focus:ring-2 focus:ring-blue-500"
+      placeholder="your@email.com"
+      required
+    />
+  </div>
+
+  <div>
+    <label className="block text-sm font-semibold text-slate-900 mb-2">Message</label>
+    <Textarea
+      name="message"
+      value={formData.message}
+      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+      className="bg-white border-gray-300 text-slate-900 placeholder-slate-400 min-h-32 transition-smooth py-2 md:py-3 px-3 md:px-4 text-sm md:text-base focus:ring-2 focus:ring-blue-500"
+      placeholder="Your message..."
+      required
+    />
+  </div>
+
+  <Button
+    type="submit"
+    disabled={isSubmitting}
+    className={`w-full bg-blue-600 text-white hover:bg-blue-700 font-semibold py-3 md:py-4 flex items-center justify-center gap-2 transition-smooth text-sm md:text-base ${isSubmitting ? 'opacity-70 cursor-not-allowed' : ''}`}
+  >
+    {isSubmitting ? (
+      <span className="flex items-center gap-2">
+        <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+        Sending...
+      </span>
+    ) : (
+      <>
+        <Send size={18} />
+        Send Message
+      </>
+    )}
+  </Button>
+</form>
 
             <div className="grid sm:grid-cols-3 gap-6 md:gap-8 pt-12 border-t border-gray-200">
               <div>

@@ -1,15 +1,12 @@
 import React, { useState, useRef } from 'react';
 
 const CertificatesSection = () => {
-  // State for the modal popup
-  const [selectedCert, setSelectedCert] = useState<any>(null);
-  
-  // Ref for the scrollable container
+  const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const certificates = [
     {
-      title: "Intro to Python",
+      title: "How Games Inspired Programming Skills and Intro to Python",
       issuer: "PUP Programmers' Guild",
       date: "2021",
       image: "certificates/pup1.png",
@@ -30,6 +27,13 @@ const CertificatesSection = () => {
       skills: ["Python", "Automation", "Selenium"],
     },
     {
+      title: "def IT pantry(); A Webinar Series for the Latest Web Technologies",
+      issuer: "PUP Programmers' Guild",
+      date: "2021",
+      image: "certificates/pup0.png",
+      skills: ["HTML", "CSS", "Javascript"],
+    },
+    {
       title: "StackLeague x AWS Tech Session: Serverless and Containers",
       issuer: "StackLeague",
       date: "2021",
@@ -37,136 +41,114 @@ const CertificatesSection = () => {
       skills: ["AWS", "Serverless Technology", "Containers"],
     },
     {
+      title: "An Introduction: Philippines Data Privacy Act of 2012",
+      issuer: "WebsitesAdvice",
+      date: "2021",
+      image: "certificates/websitesad.png",
+      skills: ["Cybersecurity", "Data Processing Etiquettes", "Proper Data Safekeeping"],
+    },
+    {
+      title: "Pinoy Codes: Web Development",
+      issuer: "Zuitt",
+      date: "2021",
+      image: "certificates/zuitt.png",
+      skills: ["Git", "PHP", "Typescript"],
+    },
+    {
       title: "SMART Technopreneurship 101",
       issuer: "TESDA",
       date: "2021",
       image: "certificates/techtes.png",
-      skills: ["Business Analysis", "Technology Entrepreneurship", "Strategic Planning"],
+      skills: ["Business Analysis", "Technology Entrepreneurship", "Market Validation"],
     },
     {
-      title: "An Introduction: Philippines Data Privacy Act of 2012",
-      issuer: "WebsitesAdvice",
+      title: "SMART Android Mobile Apps Development for Beginners",
+      issuer: "TESDA",
+      date: "2021",
+      image: "certificates/androidtes.png",
+      skills: ["Java", "Flutter", "Android Studio"],
+    },
+    {
+      title: "Responsive Web Design",
+      issuer: "freeCodeCamp",
       date: "2021",
       image: "certificates/webdes.png",
-      skills: ["Cybersecurity", "Proper Data Handling", "Safe Browsing"],
+      skills: ["Typescript", "Node.js", "React", "Next.js"],
     },
-    {
-      title: "Complete Python Developer",
-      issuer: "Udemy / Zero To Mastery",
-      date: "2024",
-      image: "certificates/pup1.png",
-      skills: ["Python", "Automation", "Selenium"],
-    },
-    {
-      title: "Complete Python Developer",
-      issuer: "Udemy / Zero To Mastery",
-      date: "2024",
-      image: "certificates/pup1.png",
-      skills: ["Python", "Automation", "Selenium"],
-    },
-    {
-      title: "Complete Python Developer",
-      issuer: "Udemy / Zero To Mastery",
-      date: "2024",
-      image: "certificates/pup1.png",
-      skills: ["Python", "Automation", "Selenium"],
-    },
-    // Add more certificates here as needed
   ];
 
+  // Carousel Scroll Logic
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { scrollLeft, clientWidth } = scrollRef.current;
-      // Calculate scroll distance (about one card's width + gap)
+      // Adjusted for mobile: smaller scroll on mobile, bigger on desktop
       const scrollAmount = clientWidth > 768 ? 450 : 320;
-      const scrollTo = direction === 'left' 
-        ? scrollLeft - scrollAmount 
-        : scrollLeft + scrollAmount;
-      
+      const scrollTo = direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount;
       scrollRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
     }
   };
 
-  const closeModal = () => setSelectedCert(null);
+  // Modal Navigation Logic
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedIdx !== null) {
+      setSelectedIdx(selectedIdx === 0 ? certificates.length - 1 : selectedIdx - 1);
+    }
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (selectedIdx !== null) {
+      setSelectedIdx(selectedIdx === certificates.length - 1 ? 0 : selectedIdx + 1);
+    }
+  };
+
+  const closeModal = () => setSelectedIdx(null);
+  const selectedCert = selectedIdx !== null ? certificates[selectedIdx] : null;
 
   return (
-    <section id="certificates" className="py-8 md:py-12 bg-gray-50 overflow-hidden">
+    <section id="certificates" className="py-8 md:py-16 bg-slate-900/95 overflow-hidden">
       <div className="container px-4 md:px-8 w-full max-w-7xl mx-auto">
         
-        {/* Header Section */}
         <div className="mb-8 text-left px-2">
-          <p className="text-xs md:text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-2">
-            Credentials
-          </p>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 tracking-tight">
-            Certifications
-          </h2>
+          <p className="text-xs md:text-sm font-bold text-blue-300 uppercase tracking-[0.2em] mb-2">Credentials</p>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white tracking-tight">Certifications</h2>
         </div>
 
-        {/* --- RELATIVE WRAPPER FOR SIDE BUTTONS --- */}
         <div className="relative group px-2">
-          
-          {/* Left Navigation Button */}
-          <button 
-            onClick={() => scroll('left')}
-            className="absolute -left-2 lg:-left-12 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 shadow-xl hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex hover:scale-110 active:scale-95"
-            aria-label="Scroll Left"
-          >
+          {/* Desktop Navigation Arrows */}
+          <button onClick={() => scroll('left')} className="absolute -left-2 lg:-left-12 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white border border-slate-200 text-slate-700 shadow-xl opacity-0 group-hover:opacity-100 hidden md:flex hover:bg-blue-600 hover:text-white transition-all transform-gpu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </button>
 
-          {/* Right Navigation Button */}
-          <button 
-            onClick={() => scroll('right')}
-            className="absolute -right-2 lg:-right-12 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 shadow-xl hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100 hidden md:flex hover:scale-110 active:scale-95"
-            aria-label="Scroll Right"
-          >
+          <button onClick={() => scroll('right')} className="absolute -right-2 lg:-right-12 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white border border-slate-200 text-slate-700 shadow-xl opacity-0 group-hover:opacity-100 hidden md:flex hover:bg-blue-600 hover:text-white transition-all transform-gpu">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
           </button>
 
-          {/* Main Horizontal Scroll Container */}
-          <div 
-            ref={scrollRef}
-            className="flex overflow-x-auto gap-6 pb-12 px-2 snap-x snap-mandatory no-scrollbar custom-scrollbar"
-          >
+          {/* Carousel Container */}
+          <div ref={scrollRef} className="flex overflow-x-auto gap-6 pb-12 px-2 snap-x snap-mandatory no-scrollbar custom-scrollbar">
             {certificates.map((cert, idx) => (
               <div 
                 key={idx}
-                onClick={() => setSelectedCert(cert)}
-                className="flex-none w-[280px] sm:w-[380px] md:w-[420px] snap-start group relative bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer"
+                onClick={() => setSelectedIdx(idx)}
+                className="flex-none w-[280px] sm:w-[380px] md:w-[420px] snap-start group/card relative bg-white rounded-2xl border border-slate-200 overflow-hidden transition-all duration-300 hover:-translate-y-1 cursor-pointer transform-gpu will-change-transform"
               >
-                {/* Image Section */}
-                <div className="relative h-48 md:h-56 w-full overflow-hidden bg-slate-100">
-                  <img 
-                    src={cert.image} 
-                    alt={cert.title} 
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
-                     <span className="bg-white text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                       Expand View
-                     </span>
+                <div className="relative h-48 md:h-56 w-full overflow-hidden bg-slate-200">
+                  <img src={cert.image} alt={cert.title} className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105 transform-gpu" />
+                  <div className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                     <span className="bg-white text-slate-900 px-6 py-2 rounded-full font-bold text-sm shadow-lg">Expand View</span>
                   </div>
                 </div>
 
-                {/* Content Section */}
                 <div className="p-6 md:p-8">
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-1 rounded">
-                      {cert.issuer}
-                    </span>
+                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest bg-blue-50 px-2 py-1 rounded">{cert.issuer}</span>
                     <span className="text-xs font-medium text-slate-400">{cert.date}</span>
                   </div>
-                  
-                  <h3 className="text-xl font-bold text-slate-900 leading-tight mb-4 group-hover:text-blue-600 transition-colors">
-                    {cert.title}
-                  </h3>
-
+                  <h3 className="text-xl font-bold text-slate-900 leading-tight mb-4 group-hover/card:text-blue-600 transition-colors line-clamp-2">{cert.title}</h3>
                   <div className="flex flex-wrap gap-2 mt-auto pt-4 border-t border-slate-100">
                     {cert.skills.map((skill, i) => (
-                      <span key={i} className="text-[10px] font-bold text-slate-500 uppercase tracking-tight">
-                        # {skill}
-                      </span>
+                      <span key={i} className="text-[10px] font-bold text-slate-500 uppercase tracking-tight"># {skill}</span>
                     ))}
                   </div>
                 </div>
@@ -176,50 +158,57 @@ const CertificatesSection = () => {
         </div>
       </div>
 
-      {/* Custom Scrollbar Styling */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: #e2e8f0; 
-            border-radius: 10px; 
-            border: 2px solid transparent;
-            background-clip: content-box;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #3b82f6; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
       `}</style>
 
-      {/* MODAL (Popup) */}
+      {/* MOBILE-OPTIMIZED MODAL */}
       {selectedCert && (
         <div 
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/90 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/98 p-2 md:p-6 backdrop-blur-md h-[100dvh]" 
           onClick={closeModal}
         >
+          {/* Navigation - Hidden on very small screens to avoid clutter, visible on MD+ */}
+          <button onClick={handlePrev} className="absolute left-2 md:left-8 z-[110] p-3 text-white/70 bg-white/10 rounded-full hover:bg-white/20 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+
+          <button onClick={handleNext} className="absolute right-2 md:right-8 z-[110] p-3 text-white/70 bg-white/10 rounded-full hover:bg-white/20 transition-all">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+
           <div 
-            className="relative max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-300" 
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close Button */}
             <button 
-              onClick={closeModal}
-              className="absolute top-4 right-4 z-10 bg-slate-800 text-white p-2 rounded-full hover:bg-slate-900 transition-colors shadow-lg"
+              onClick={closeModal} 
+              className="absolute top-3 right-3 z-[120] bg-slate-900/80 text-white p-2 rounded-full shadow-lg"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
 
-            <div className="p-2 md:p-4 bg-slate-50">
+            {/* Content Container */}
+            <div className="flex flex-col">
+              <div className="p-1 md:p-2 bg-slate-50 flex justify-center items-center">
                 <img 
-                src={selectedCert.image} 
-                alt={selectedCert.title} 
-                className="w-full h-auto max-h-[70vh] object-contain rounded-lg shadow-inner"
+                  src={selectedCert.image} 
+                  alt={selectedCert.title} 
+                  className="w-full h-auto max-h-[60vh] md:max-h-[80vh] object-contain rounded-lg" 
                 />
-            </div>
-            
-            <div className="p-8 bg-white text-center border-t border-slate-100">
-              <h3 className="text-2xl md:text-4xl font-bold text-slate-900 mb-2">{selectedCert.title}</h3>
-              <p className="text-blue-600 font-bold uppercase tracking-widest">{selectedCert.issuer} — {selectedCert.date}</p>
+              </div>
+              
+              <div className="p-5 md:p-8 bg-white text-center border-t border-slate-100">
+                <h3 className="text-lg md:text-3xl font-bold text-slate-900 mb-1 leading-tight">
+                  {selectedCert.title}
+                </h3>
+                <p className="text-blue-600 font-bold uppercase tracking-widest text-[10px] md:text-sm">
+                  {selectedCert.issuer} — {selectedCert.date}
+                </p>
+              </div>
             </div>
           </div>
         </div>

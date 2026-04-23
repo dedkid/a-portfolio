@@ -4,6 +4,21 @@
 @plugin "tailwindcss-animate";
 @custom-variant dark (&:is(.dark *));
 
+.bg-experience-parallax {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+                    url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80');
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+/* Optional: Disable parallax on mobile for better performance */
+@media (max-width: 768px) {
+  .bg-experience-parallax {
+    background-attachment: scroll;
+  }
+}
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
